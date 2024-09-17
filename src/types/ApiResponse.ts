@@ -1,7 +1,8 @@
 
 export interface ApiResponse {
     message : string,
-    success : boolean
+    success : boolean,
+    data : object
 }
 
 

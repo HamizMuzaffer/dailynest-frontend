@@ -10,4 +10,3 @@ export interface loginUser {
     password : string
 }
 
-
