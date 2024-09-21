@@ -36,6 +36,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import axiosInstance from "@/axios";
+import toast from "react-hot-toast";
+import { useAuthContext } from "@/context/AuthContext";
 
 const LoginForm = () => {
   const form = useForm<z.infer<typeof loginSchema>>({
@@ -53,11 +56,31 @@ const LoginForm = () => {
   const toggleShow = () => {
     setIsShow(!isShow);
   };
-
+  const {setAuthToken} = useAuthContext();
   type formValues = z.infer<typeof loginSchema>;
 
-  const submitHandler = (values: formValues) => {
+  const submitHandler = async (values: formValues) => {
     setLoading(true);
+
+    const formData = {
+      email: values.email,
+      password: values.password,
+    };
+
+    try {
+      const response = await axiosInstance.post("/login",formData);
+
+      if(response.status == 200){
+        toast.success("Login Sucessfull")
+        setAuthToken(response?.data)
+      }
+     
+    } catch (error:any) {
+      toast.error(error?.response?.data?.error);
+    }
+    finally{
+      setLoading(false)
+    }
   };
 
   return (
@@ -121,15 +144,15 @@ const LoginForm = () => {
               />
             </div>
             <div className="flex justify-center">
-            <Button disabled={loading} className="button" type="submit">
-              {loading ? (
-                <span className="flex w-full items-center justify-center">
-                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                </span>
-              ) : (
-                "Sign in"
-              )}
-            </Button>
+              <Button disabled={loading} className="bg-base" type="submit">
+                {loading ? (
+                  <span className="flex w-full items-center justify-center">
+                    <Loader2 className="mx-4 h-5 w-5 animate-spin" />
+                  </span>
+                ) : (
+                  "Sign in"
+                )}
+              </Button>
             </div>
           </form>
         </Form>

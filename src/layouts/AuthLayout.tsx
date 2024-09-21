@@ -1,7 +1,13 @@
+import { Navigate, Outlet } from "react-router-dom";
+import { useAuthContext } from "@/context/AuthContext";
 
 const AuthLayout = () => {
+  const { authToken } = useAuthContext();
+  if(authToken?.token) {
+    return <Navigate to="/home/dashboard" replace/>
+  }
   return (
-    <div>AuthLayout</div>
+    <div><Outlet/></div>
   )
 }
 
