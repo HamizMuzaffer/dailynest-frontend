@@ -3,12 +3,14 @@ import { useAuthContext } from "@/context/AuthContext";
 
 const AuthLayout = () => {
   const { authToken } = useAuthContext();
-  if(authToken?.token) {
-    return <Navigate to="/home/dashboard" replace/>
+  if (authToken?.token) {
+    return <Navigate to="/home/dashboard" replace />;
   }
   return (
-    <div><Outlet/></div>
-  )
-}
+    <div>
+      <Outlet />
+    </div>
+  );
+};
 
-export default AuthLayout
+export default AuthLayout;
